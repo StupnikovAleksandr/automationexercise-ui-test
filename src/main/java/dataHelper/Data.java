@@ -5,78 +5,73 @@ import lombok.Value;
 
 import java.util.Locale;
 
-public class Data {
+public final class Data {
+
+    private Data() {
+    }
 
     private static final Faker faker = new Faker(new Locale("en"));
 
-
     @Value
-    public static class  SingFill {
-        String Name;
-        String Email;
+    public static class SignupData {
+        String name;
+        String email;
     }
     @Value
-    public static class AuthUsers {
-        String Email;
-        String Password;
+    public static class Credentials {
+        String email;
+        String password;
     }
-    public static AuthUsers signIN() {
-        return new AuthUsers(
-                hardCodeEmail(),
-                hardCodePassword()
+    public static Credentials existingUserCredentials() {
+        return new Credentials(
+                existingUserEmail(),
+                existingUserPassword()
         );
     }
-        public static AuthUsers loginFailed() {
-            return new AuthUsers(
-                    generateRandomEmail(),
-                    generateRandomPassword()
-            );
+    public static Credentials invalidCredentials() {
+        return new Credentials(
+                generateRandomEmail(),
+                generateRandomPassword()
+        );
     }
-    public static SingFill singUP() {
-        return new SingFill(
+    public static SignupData newSignupData() {
+        return new SignupData(
                 generateRandomName(),
                 generateRandomEmail()
         );
 
     }
-    public static SingFill existingUseFailed() {
-        return new SingFill(
+    public static SignupData existingEmailSignupData() {
+        return new SignupData(
                 generateRandomName(),
-                hardCodeEmail()
+                existingUserEmail()
         );
     }
 
     @Value
-    public static class RegisterFill {
-        //        String Title;
-        String Name;
-        String Password;
-        //        String DAYOfBirth;
-//        String MONTHSOfBirth;
-//        String YEARSOfBirth;
-//        String CheckBoxNewsletter;
-//        String CheckBoxUniform;
-        String FirstName;
-        String LastName;
-        String Company;
-        String Address1;
-        String Address2;
-        //        String Country;
-        String State;
-        String City;
-        String ZipCode;
-        String PhoneNumber;
+    public static class RegistrationData {
+        String name;
+        String password;
+        String firstName;
+        String lastName;
+        String company;
+        String address1;
+        String address2;
+        String state;
+        String city;
+        String zipCode;
+        String phoneNumber;
     }
 
-    public static RegisterFill generateRegisterFill() {
-        return new RegisterFill(
+    public static RegistrationData newRegistrationData() {
+        return new RegistrationData(
                 generateRandomName(),
                 generateRandomPassword(),
                 generateRandomFirstName(),
                 generateRandomLastName(),
                 generateRandomCompanyName(),
-                generateRandomCompanyAddress1and2(),
-                generateRandomCompanyAddress1and2(),
+                generateRandomAddress(),
+                generateRandomAddress(),
                 generateRandomState(),
                 generateRandomCity(),
                 generateRandomZipCode(),
@@ -84,29 +79,40 @@ public class Data {
         );
     }
 
+    @Value
+    public static class PaymentData {
+        String name;
+        String cardNumber;
+        String cvc;
+        String month;
+        String year;
+    }
+
+    public static PaymentData newPaymentData() {
+        return new PaymentData(generateRandomFirstName() + " " + generateRandomLastName(),
+                "4111111111111111", "123", "12",
+                String.valueOf(java.time.Year.now().getValue() + 2));
+    }
+
     public static String generateRandomName() {
         return faker.name().username();
     }
 
     public static String generateRandomEmail() {
-        return faker.internet().emailAddress();
+        return "ui." + java.util.UUID.randomUUID() + "@example.com";
     }
-
 
     public static String generateRandomPassword() {
         return faker.internet().password();
     }
 
-    //REAL USER FOR TC-2!!! NOT DELETE!
-    public static String hardCodePassword() {
+    // Shared fixture account: login tests must not delete it.
+    public static String existingUserPassword() {
         return "2151253167rqwfcf";
     }
-    //REAL USER FOR TC-2!!! NOT DELETE!
-    public static String hardCodeEmail() {
+    public static String existingUserEmail() {
         return "guz.tcrbzaoksk@tularegion.ru";
     }
-
-
 
     public static String generateRandomFirstName() {
         return faker.name().firstName();
@@ -136,9 +142,8 @@ public class Data {
         return faker.company().name();
     }
 
-    public static String generateRandomCompanyAddress1and2() {
+    public static String generateRandomAddress() {
         return faker.address().fullAddress();
     }
-
 
 }

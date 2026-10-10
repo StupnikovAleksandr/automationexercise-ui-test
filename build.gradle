@@ -20,4 +20,10 @@ dependencies {
 
 test {
     useJUnitPlatform()
+    systemProperty 'headless', System.getProperty('headless', 'false')
+    systemProperty 'baseUrl', System.getProperty('baseUrl', 'https://automationexercise.com')
+    testLogging {
+        events 'passed', 'skipped', 'failed'
+        exceptionFormat 'full'
+    }
 }

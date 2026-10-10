@@ -1,4 +1,4 @@
-# Automation Exercise UI Tests
+# automationexercise-ui-test
 
 ![Java](https://img.shields.io/badge/Java-17%2B-orange?logo=openjdk)
 ![Selenide](https://img.shields.io/badge/Selenide-UI%20Testing-4B9CD3)
@@ -44,8 +44,8 @@ Test data is stored separately to keep the test code clean, readable, and reusab
 ### Clone the repository
 
 ```bash
-git clone https://github.com/StupnikovAleksandr/automationexercise-ui-tests.git
-cd automationexercise-ui-tests
+git clone https://github.com/StupnikovAleksandr/automationexercise-ui-test.git
+cd automationexercise-ui-test
 ```
 
 ### Run all tests
@@ -118,3 +118,48 @@ Possible improvements for the project:
 ---
 
 **Built for learning, practicing, and improving UI test automation skills.**
+
+
+## UI case coverage
+
+The suite implements [Automation Exercise test cases 1?26](https://automationexercise.com/test_cases).
+Page objects remain in `src/main/java/pages`, data factories in `dataHelper`,
+and tests in `src/test/java`. Shared navigation is in `BasePage`; reusable
+product-list and subscription controls are in `pages/components`.
+
+| Test class | Case numbers |
+| --- | --- |
+| RegistrationTest | 1, 5 |
+| LoginTest | 2, 3, 4 |
+| ContactTest | 6 |
+| NavigationTest | 7 |
+| ProductTest | 8, 9, 18, 19, 21 |
+| SubscriptionTest | 10, 11 |
+| CartTest | 12, 13, 17, 20, 22 |
+| CheckoutTest | 14, 15, 16, 23, 24 |
+| ScrollTest | 25, 26 |
+
+Each test starts with a fresh browser session. Account scenarios create their
+own user through the UI and delete that user during the scenario or teardown.
+The shared hardcoded account is not used by this suite.
+
+Run all cases in headless Chrome on Windows:
+
+```powershell
+.\gradlew.bat test "-Dheadless=true"
+```
+
+Run one group:
+
+```powershell
+.\gradlew.bat test --tests CartTest "-Dheadless=true"
+```
+
+`-DbaseUrl=https://automationexercise.com` overrides the target URL.
+Tests need internet access and Chrome. They submit practice reviews/contact
+forms and simulated orders to the demonstration site. The contact attachment
+is in `src/test/resources`; downloaded invoices are stored under `build`.
+
+The live payment confirmation currently displays `ORDER PLACED!` and
+`Congratulations! Your order has been confirmed!`; these are checked instead
+of the older success wording in the published cases.
